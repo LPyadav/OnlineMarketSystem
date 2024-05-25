@@ -42,7 +42,7 @@ class Handler extends ExceptionHandler
             $message = 'Unauthenticated';
         } elseif ($exception instanceof \Illuminate\Validation\ValidationException) {
             $status = 422;
-            $message = 'Validation error';
+            $message = 'Validation Error';
             return APIResponse::error($message, $status, $exception->errors());
         } elseif ($exception instanceof \Symfony\Component\HttpKernel\Exception\HttpException) {
             $status = $exception->getStatusCode();
