@@ -2,7 +2,8 @@
 
 use App\Http\Controllers\API\{
     AuthController,
-    ProductController
+    ProductController,
+    CartController
 };
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -25,6 +26,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout-from-all-devices', [AuthController::class, 'LogoutFromAllDevices']);
     Route::post('/add-product', [ProductController::class, 'AddProduct']);
     Route::post('/get-user-product', [ProductController::class, 'GetUserProducts']);
+    Route::post('/cart/add', [CartController::class, 'AddToCart']);
+    Route::delete('/cart/remove', [CartController::class, 'RemoveFromCart']);
 });
 Route::get('/get-all-product', [ProductController::class, 'GetAllProducts']);
 
