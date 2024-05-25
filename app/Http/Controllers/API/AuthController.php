@@ -23,24 +23,18 @@ class AuthController extends Controller
      public function UserRegister(Request $request)
      {
           // Validate the request data
-          $validator = Validator::make($request->all(), [
+          $request->validate([
                'name' => 'required|string|max:255',
                'email' => 'required|string|email|max:255|unique:users',
-               'role' => 'required|string|in:user,seller',
                'password' => 'required|string|min:8|confirmed',
           ]);
 
-          // If validation fails, return a detailed error response
-          if ($validator->fails()) {
-               return APIResponse::error('Validation error', 422, $validator->errors());
-          }
 
           try {
                // Create a new user
                $user = User::create([
                     'name' => $request->name,
                     'email' => $request->email,
-                    'role' => $request->role,
                     'password' => Hash::make($request->password),
                ]);
                return APIResponse::success($user, 'User registered successfully', 201);
@@ -112,13 +106,9 @@ class AuthController extends Controller
                'user_id' => 'required|integer|exists:users,id',
           ]);
 
-          $user = User::find($request->user_id);
-          if (!$user) {
-               return APIResponse::error('Invalid user ID', 404);
-          }
           $existingToken = $request->bearerToken();
           $personalAccessToken = PersonalAccessToken::findToken($existingToken);
-          if (isset($personalAccessToken->tokenable->id) && $personalAccessToken->tokenable->id == $user->id) {
+          if (isset($personalAccessToken->tokenable->id) && $personalAccessToken->tokenable->id == $request->user_id) {
                $personalAccessToken->delete();
                return APIResponse::success([], 'User logged out successfully');
           } else {
@@ -141,9 +131,6 @@ class AuthController extends Controller
                'user_id' => 'required|integer|exists:users,id',
           ]);
           $user = User::find($request->user_id);
-          if (!$user) {
-               return APIResponse::error('Invalid user ID', 404);
-          }
           // Revoke all access tokens for the authenticated user
           $user->tokens()->delete();
           return APIResponse::success([], 'Logged out from all devices');
