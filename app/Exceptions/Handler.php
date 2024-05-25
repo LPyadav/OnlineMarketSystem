@@ -4,6 +4,7 @@ namespace App\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Throwable;
+use App\Helpers\APIResponse;
 
 class Handler extends ExceptionHandler
 {
@@ -26,5 +27,28 @@ class Handler extends ExceptionHandler
         $this->reportable(function (Throwable $e) {
             //
         });
+    }
+
+    public function render($request, Throwable $exception)
+    {
+        $status = 500;
+        $message = 'An unexpected error occurred';
+
+        if ($exception instanceof \Illuminate\Database\Eloquent\ModelNotFoundException) {
+            $status = 404;
+            $message = 'Resource not found';
+        } elseif ($exception instanceof \Illuminate\Auth\AuthenticationException) {
+            $status = 401;
+            $message = 'Unauthenticated';
+        } elseif ($exception instanceof \Illuminate\Validation\ValidationException) {
+            $status = 422;
+            $message = 'Validation error';
+            return APIResponse::error($message, $status, $exception->errors());
+        } elseif ($exception instanceof \Symfony\Component\HttpKernel\Exception\HttpException) {
+            $status = $exception->getStatusCode();
+            $message = $exception->getMessage() ?: $message;
+        }
+
+        return APIResponse::error($message, $status);
     }
 }
