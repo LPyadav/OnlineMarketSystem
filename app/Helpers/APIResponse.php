@@ -6,11 +6,17 @@ class APIResponse
 {
     public static function success($data = [], $message = 'Operation successful', $status = 200)
     {
-        return response()->json([
+        $response = [
             'success' => true,
             'message' => $message,
-            'data' => $data,
-        ], $status);
+        ];
+
+        if (!empty($data)) {
+            $response['data'] = $data;
+        }
+
+        return response()->json($response, $status);
+
     }
 
     public static function error($message = 'An error occurred', $status = 400, $errors = [])
