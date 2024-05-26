@@ -9,7 +9,7 @@ This is an online marketplace platform built using Laravel, allowing users to bu
 - **User Authentication**: Secure user login and registration using Laravel Sanctum.
 - **Multi-device Authentication**: Users can authenticate from multiple devices simultaneously.
 - **Logout from All Devices**: Users can log out from all devices.
-- **Product Management**: CRUD operations for products.
+- **Product Management**: Add products.
 - **Order Processing**: Basic order management.
 - **Image Uploads**: Secure image upload for product images.
 
@@ -19,7 +19,6 @@ This is an online marketplace platform built using Laravel, allowing users to bu
 - PHP >= 8.1
 - Composer
 - MySQL
-- Node.js and npm (for frontend dependencies)
 
 ### Installation
 
