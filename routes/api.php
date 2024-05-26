@@ -3,7 +3,8 @@
 use App\Http\Controllers\API\{
     AuthController,
     ProductController,
-    CartController
+    CartController,
+    OrderController
 };
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -19,15 +20,20 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::post("/register", [AuthController::class, 'UserRegister']);
-Route::post('/login', [AuthController::class, 'UserLogin'])->name('login');
+Route::post("/user/register", [AuthController::class, 'UserRegister']);
+Route::post('/user/login', [AuthController::class, 'UserLogin'])->name('login');
 Route::middleware('auth:sanctum')->group(function () {
-    Route::post('/logout', [AuthController::class, 'Logout']);
-    Route::post('/logout-from-all-devices', [AuthController::class, 'LogoutFromAllDevices']);
-    Route::post('/add-product', [ProductController::class, 'AddProduct']);
-    Route::post('/get-user-product', [ProductController::class, 'GetUserProducts']);
+    Route::post('/user/logout', [AuthController::class, 'Logout']);
+    Route::post('/user/logout-from-all-devices', [AuthController::class, 'LogoutFromAllDevices']);
+    Route::post('/user/orders', [OrderController::class, 'GetUserOrders']);
+    Route::post('/user/order/details', [OrderController::class, 'GetUserOrderDetails']);
+    Route::post('product/add', [ProductController::class, 'AddProduct']);
+    Route::post('/user/products', [ProductController::class, 'GetUserProducts']);
     Route::post('/cart/add', [CartController::class, 'AddToCart']);
     Route::delete('/cart/remove', [CartController::class, 'RemoveFromCart']);
+    Route::post('/order/create', [OrderController::class, 'CreateOrder']);
+
+
 });
-Route::get('/get-all-product', [ProductController::class, 'GetAllProducts']);
+Route::get('/product/all', [ProductController::class, 'GetAllProducts']);
 

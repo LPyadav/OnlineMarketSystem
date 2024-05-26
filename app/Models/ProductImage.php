@@ -18,6 +18,11 @@ class ProductImage extends Model
         'image_path',
     ];
 
+    public function getImagePathAttribute($image)
+    {
+        return asset('storage/' . $image);
+    }
+
 
     /**
      * Get the product that owns the image.

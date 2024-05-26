@@ -43,7 +43,7 @@ class ProductController extends Controller
         // Upload and attach images
         if ($request->hasFile('images')) {
             foreach ($request->file('images') as $image) {
-                $imagePath = $image->store('product_images');
+                $imagePath = $image->store('product_images','public');
                 $productImage = new ProductImage([
                     'image_path' => $imagePath
                 ]);
